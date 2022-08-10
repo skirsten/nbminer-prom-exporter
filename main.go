@@ -72,7 +72,8 @@ type nbminerStatusResponse struct {
 func (c *NBMinerCollector) Collect(ch chan<- prometheus.Metric) {
 	resp, err := c.Client.Get(c.Endpoint)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		return
 	}
 	defer resp.Body.Close()
 
@@ -82,7 +83,8 @@ func (c *NBMinerCollector) Collect(ch chan<- prometheus.Metric) {
 
 	err = decoder.Decode(&status)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		return
 	}
 
 	for _, device := range status.Miner.Devices {
